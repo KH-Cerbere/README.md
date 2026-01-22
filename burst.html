@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>研究热点漂移检测 - UBEM演进可视化</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* 深色科研风格主题 */
+        body { font-family: 'Inter', 'Noto Sans SC', sans-serif; background-color: #0F172A; color: #E2E8F0; }
+        .chart-wrapper { position: relative; height: 500px; width: 100%; }
+        .phase-card { transition: transform 0.2s; }
+        .phase-card:hover { transform: translateY(-2px); }
+    </style>
+    <!-- Visualization Choice: 
+         Floating Bar Chart (Gantt-style) via Chart.js.
+         Why? It perfectly represents "Burst Detection" (CiteSpace style) by showing the specific duration (Start Year to End Year) of a keyword's high citation activity.
+         Color Logic: Blue (Geometry) -> Orange (Physics) -> Purple (Data) -> Teal (Carbon/Goal).
+    -->
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center p-4 md:p-8">
+
+    <main class="w-full max-w-5xl bg-gray-800 rounded-2xl shadow-2xl border border-gray-700 overflow-hidden">
+        
+        <!-- 头部说明 -->
+        <header class="bg-gray-900 px-6 py-5 border-b border-gray-700 flex justify-between items-center">
+            <div>
+                <h1 class="text-xl md:text-2xl font-bold text-white tracking-tight">
+                    研究热点漂移路径 <span class="text-teal-400 text-base font-normal">(Burst Detection)</span>
+                </h1>
+                <p class="text-gray-400 text-sm mt-1">
+                    基于 CiteSpace 算法模拟：展示 UBEM 领域七大核心关键词的爆发周期演变 (2005-2025)
+                </p>
+            </div>
+            <div class="hidden md:block">
+                <span class="px-3 py-1 rounded-full bg-gray-700 text-xs text-gray-300 font-mono">Simulated Data</span>
+            </div>
+        </header>
+
+        <!-- 图表区域 -->
+        <div class="p-6 md:p-8 bg-gray-800">
+            <div class="chart-wrapper">
+                <canvas id="burstChart"></canvas>
+            </div>
+        </div>
+
+        <!-- 阶段解读面板 (Legend & Insight) -->
+        <div class="grid grid-cols-1 md:grid-cols-4 border-t border-gray-700 divide-y md:divide-y-0 md:divide-x divide-gray-700 bg-gray-900">
+            
+            <!-- Phase 1 -->
+            <div class="p-4 phase-card">
+                <div class="flex items-center space-x-2 mb-2">
+                    <div class="w-3 h-3 rounded-full bg-blue-500"></div>
+                    <h3 class="font-bold text-blue-400 text-sm">Phase 1: 几何构建</h3>
+                </div>
+                <p class="text-xs text-gray-500 leading-relaxed">
+                    <strong>CityGML (2008-2014)</strong><br>
+                    研究初期聚焦于解决三维城市模型的数据标准与互操作性问题，为大规模模拟奠定几何基础。
+                </p>
+            </div>
+
+            <!-- Phase 2 -->
+            <div class="p-4 phase-card">
+                <div class="flex items-center space-x-2 mb-2">
+                    <div class="w-3 h-3 rounded-full bg-orange-500"></div>
+                    <h3 class="font-bold text-orange-400 text-sm">Phase 2: 物理模拟</h3>
+                </div>
+                <p class="text-xs text-gray-500 leading-relaxed">
+                    <strong>EnergyPlus & Calibration (2011-2018)</strong><br>
+                    核心关注物理引擎的准确性与参数校准。是从“能算”到“算得准”的关键转折期。
+                </p>
+            </div>
+
+            <!-- Phase 3 -->
+            <div class="p-4 phase-card">
+                <div class="flex items-center space-x-2 mb-2">
+                    <div class="w-3 h-3 rounded-full bg-purple-500"></div>
+                    <h3 class="font-bold text-purple-400 text-sm">Phase 3: 数据驱动</h3>
+                </div>
+                <p class="text-xs text-gray-500 leading-relaxed">
+                    <strong>Machine Learning (2017-2024)</strong><br>
+                    引入AI与大数据（城市感知），解决物理模型计算慢的瓶颈，实现城市级快速预测。
+                </p>
+            </div>
+
+            <!-- Phase 4 -->
+            <div class="p-4 phase-card">
+                <div class="flex items-center space-x-2 mb-2">
+                    <div class="w-3 h-3 rounded-full bg-teal-500"></div>
+                    <h3 class="font-bold text-teal-400 text-sm">Phase 4: 碳中和</h3>
+                </div>
+                <p class="text-xs text-gray-500 leading-relaxed">
+                    <strong>Carbon Neutrality (2022-Now)</strong><br>
+                    当前热点。UBEM 成为实现“双碳”目标与数字孪生城市管理的核心决策工具。
+                </p>
+            </div>
+
+        </div>
+    </main>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('burstChart').getContext('2d');
+
+            // 数据定义：[开始年份, 结束年份]
+            // 为了视觉效果，颜色与下方的解读面板严格对应
+            const data = {
+                labels: [
+                    'CityGML (几何标准)', 
+                    'EnergyPlus (物理引擎)', 
+                    'Model Calibration (模型校准)', 
+                    'Machine Learning (机器学习)', 
+                    'Urban Sensing (城市感知)', 
+                    'Digital Twin (数字孪生)', 
+                    'Carbon Neutrality (碳中和)'
+                ],
+                datasets: [{
+                    label: '爆发持续期',
+                    data: [
+                        [2008, 2014], // Phase 1: Blue
+                        [2011, 2016], // Phase 2: Orange
+                        [2013, 2018], // Phase 2: Orange
+                        [2017, 2022], // Phase 3: Purple
+                        [2019, 2024], // Phase 3: Purple
+                        [2021, 2026], // Phase 4: Teal (Extended to present)
+                        [2022, 2026]  // Phase 4: Teal
+                    ],
+                    backgroundColor: [
+                        'rgba(59, 130, 246, 0.8)',  // Blue
+                        'rgba(249, 115, 22, 0.8)',  // Orange
+                        'rgba(249, 115, 22, 0.8)',  // Orange
+                        'rgba(168, 85, 247, 0.8)',  // Purple
+                        'rgba(168, 85, 247, 0.8)',  // Purple
+                        'rgba(20, 184, 166, 0.8)',  // Teal
+                        'rgba(20, 184, 166, 0.8)'   // Teal
+                    ],
+                    borderColor: 'rgba(255, 255, 255, 0.1)',
+                    borderWidth: 1,
+                    barPercentage: 0.5, // 让条形更细，看起来更像时间线
+                    borderRadius: 4     // 圆角效果
+                }]
+            };
+
+            const config = {
+                type: 'bar',
+                data: data,
+                options: {
+                    indexAxis: 'y', // 变成横向条形图
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false }, // 隐藏默认图例，使用下方自定义面板
+                        tooltip: {
+                            backgroundColor: 'rgba(15, 23, 42, 0.9)',
+                            titleColor: '#E2E8F0',
+                            bodyColor: '#CBD5E1',
+                            callbacks: {
+                                label: function(context) {
+                                    const raw = context.raw;
+                                    const duration = raw[1] - raw[0];
+                                    return `爆发期: ${raw[0]}年 - ${raw[1]}年 (持续 ${duration} 年)`;
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: {
+                            min: 2005,
+                            max: 2026,
+                            grid: {
+                                color: '#334155',
+                                drawBorder: false
+                            },
+                            ticks: {
+                                color: '#94A3B8',
+                                stepSize: 2
+                            },
+                            title: {
+                                display: true,
+                                text: '年份',
+                                color: '#64748B',
+                                font: { size: 12 }
+                            }
+                        },
+                        y: {
+                            grid: {
+                                display: false, // 隐藏Y轴网格，更干净
+                                drawBorder: false
+                            },
+                            ticks: {
+                                color: '#E2E8F0',
+                                font: {
+                                    size: 13,
+                                    family: "'Inter', sans-serif"
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 1500,
+                        easing: 'easeOutQuart'
+                    }
+                }
+            };
+
+            new Chart(ctx, config);
+        });
+    </script>
+</body>
+</html>

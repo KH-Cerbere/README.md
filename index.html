@@ -1,0 +1,497 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>系统综述研究方案：UBEM演进与碳中和</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/3.9.1/chart.min.js"></script>
+    <!-- 引入谷歌字体，包含中文支持的样式 -->
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@300;400;500;700&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <style>
+        body { font-family: 'Noto Sans SC', 'Inter', sans-serif; background-color: #F5F5F4; color: #1C1917; }
+        .chart-container { position: relative; width: 100%; max-width: 600px; margin: 0 auto; height: 350px; }
+        .flow-node { transition: all 0.3s ease; cursor: pointer; }
+        .flow-node:hover { transform: translateY(-2px); box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1), 0 2px 4px -1px rgba(0, 0, 0, 0.06); }
+        .active-tab { border-bottom: 2px solid #0D9488; color: #0D9488; font-weight: 600; }
+        .inactive-tab { color: #57534E; }
+        .active-tab:hover { color: #0F766E; }
+    </style>
+</head>
+<body class="bg-stone-100 min-h-screen flex flex-col">
+
+    <!-- 头部区域 -->
+    <header class="bg-white border-b border-stone-200 sticky top-0 z-50">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6">
+            <div class="flex justify-between items-center">
+                <div>
+                    <h1 class="text-2xl font-bold text-stone-800">系统综述研究方案 (Protocol)</h1>
+                    <p class="text-sm text-stone-500 mt-1">研究方向：<span class="text-teal-700 font-medium">UBEM演进：从物理建模到城市感知</span></p>
+                </div>
+                <div class="hidden md:block">
+                    <span class="bg-teal-50 text-teal-700 px-3 py-1 rounded-full text-xs font-semibold border border-teal-200">方案编号: UBEM-2024-REV</span>
+                </div>
+            </div>
+            
+            <!-- 导航栏 -->
+            <nav class="flex space-x-8 mt-6 overflow-x-auto pb-2">
+                <button onclick="switchTab('search')" id="tab-search" class="active-tab pb-2 px-1 text-sm whitespace-nowrap">1. 检索策略</button>
+                <button onclick="switchTab('screening')" id="tab-screening" class="inactive-tab pb-2 px-1 text-sm whitespace-nowrap hover:text-stone-800">2. PRISMA 筛选流程</button>
+                <button onclick="switchTab('criteria')" id="tab-criteria" class="inactive-tab pb-2 px-1 text-sm whitespace-nowrap hover:text-stone-800">3. 纳入/排除标准</button>
+                <button onclick="switchTab('analysis')" id="tab-analysis" class="inactive-tab pb-2 px-1 text-sm whitespace-nowrap hover:text-stone-800">4. 质量评估与提取</button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- 主要内容区域 -->
+    <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full">
+
+        <!-- 标签页 1: 检索策略 -->
+        <div id="content-search" class="space-y-8 animate-fade-in">
+            <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6">
+                <h2 class="text-xl font-semibold text-stone-800 mb-4">检索策略构建</h2>
+                <p class="text-stone-600 mb-6 leading-relaxed">
+                    本部分定义了从主要学术数据库检索相关文献所需的布尔逻辑和关键词。
+                    该策略旨在覆盖三个核心领域的交叉点：<strong>城市建筑能源建模 (UBEM)</strong>、
+                    <strong>城市感知/数据</strong> 以及 <strong>碳中和</strong> 目标。
+                </p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+                    <!-- 概念 1 -->
+                    <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="font-bold text-stone-700">概念 A: 研究对象</span>
+                            <span class="text-xs bg-blue-100 text-blue-800 px-2 py-0.5 rounded">UBEM</span>
+                        </div>
+                        <ul class="space-y-2 text-sm text-stone-600">
+                            <li class="flex items-center"><span class="text-blue-500 mr-2">●</span> "Urban Building Energy Modeling"</li>
+                            <li class="flex items-center"><span class="text-blue-500 mr-2">●</span> "City Energy Simulation"</li>
+                            <li class="flex items-center"><span class="text-blue-500 mr-2">●</span> "UBEM"</li>
+                        </ul>
+                    </div>
+
+                    <!-- 概念 2 -->
+                    <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="font-bold text-stone-700">概念 B: 研究背景</span>
+                            <span class="text-xs bg-green-100 text-green-800 px-2 py-0.5 rounded">碳目标</span>
+                        </div>
+                        <ul class="space-y-2 text-sm text-stone-600">
+                            <li class="flex items-center"><span class="text-green-500 mr-2">●</span> "Carbon Neutrality" (碳中和)</li>
+                            <li class="flex items-center"><span class="text-green-500 mr-2">●</span> "Net Zero" (净零)</li>
+                            <li class="flex items-center"><span class="text-green-500 mr-2">●</span> "Decarbonization" (脱碳)</li>
+                        </ul>
+                    </div>
+
+                    <!-- 概念 3 -->
+                    <div class="bg-stone-50 p-4 rounded-lg border border-stone-200">
+                        <div class="flex items-center justify-between mb-3">
+                            <span class="font-bold text-stone-700">概念 C: 方法/演进</span>
+                            <span class="text-xs bg-purple-100 text-purple-800 px-2 py-0.5 rounded">技术演进</span>
+                        </div>
+                        <ul class="space-y-2 text-sm text-stone-600">
+                            <li class="flex items-center"><span class="text-purple-500 mr-2">●</span> "Urban Sensing" (城市感知)</li>
+                            <li class="flex items-center"><span class="text-purple-500 mr-2">●</span> "Data-driven" (数据驱动)</li>
+                            <li class="flex items-center"><span class="text-purple-500 mr-2">●</span> "Physical Modeling" (物理建模)</li>
+                        </ul>
+                    </div>
+                </div>
+
+                <!-- 数据库逻辑生成器 -->
+                <div class="mt-8">
+                    <div class="flex items-center justify-between mb-2">
+                        <h3 class="font-semibold text-stone-800">生成的布尔检索式 (点击切换数据库)</h3>
+                        <div class="flex space-x-2">
+                            <button onclick="updateQuery('Scopus')" class="text-xs bg-stone-200 hover:bg-teal-100 hover:text-teal-700 px-3 py-1 rounded transition">Scopus</button>
+                            <button onclick="updateQuery('WoS')" class="text-xs bg-stone-200 hover:bg-teal-100 hover:text-teal-700 px-3 py-1 rounded transition">Web of Science</button>
+                            <button onclick="updateQuery('IEEE')" class="text-xs bg-stone-200 hover:bg-teal-100 hover:text-teal-700 px-3 py-1 rounded transition">IEEE Xplore</button>
+                        </div>
+                    </div>
+                    <div class="bg-stone-900 text-green-400 p-4 rounded-lg font-mono text-xs md:text-sm overflow-x-auto shadow-inner leading-6">
+                        <span id="query-output">TITLE-ABS-KEY ( ("Urban Building Energy Modeling" OR "UBEM" OR "City Energy Simulation") AND ("Carbon Neutrality" OR "Net Zero" OR "Decarbonization") AND ("Urban Sensing" OR "Data-driven" OR "Physical Modeling") )</span>
+                    </div>
+                    <p class="text-xs text-stone-400 mt-2 text-right">最后更新时间: <span id="query-date">今天</span></p>
+                </div>
+            </div>
+        </div>
+
+        <!-- 标签页 2: PRISMA 筛选流程 -->
+        <div id="content-screening" class="hidden space-y-8 animate-fade-in">
+            <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6">
+                <h2 class="text-xl font-semibold text-stone-800 mb-4">PRISMA 流程图</h2>
+                <p class="text-stone-600 mb-6 leading-relaxed">
+                    系统综述和荟萃分析优先报告条目 (PRISMA) 流程图概述了已识别、纳入和排除的记录数量及其原因。
+                    点击下方的任意阶段可查看该阶段的具体操作规范。
+                </p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
+                    <!-- 交互式流程图 (CSS Grid) -->
+                    <div class="flex flex-col items-center space-y-4">
+                        
+                        <!-- 识别阶段 -->
+                        <div onclick="showPrismaDetail('identification')" class="flow-node w-full bg-blue-50 border-l-4 border-blue-500 p-4 rounded shadow-sm hover:bg-blue-100">
+                            <h4 class="font-bold text-blue-900">1. 识别 (Identification)</h4>
+                            <p class="text-xs text-blue-700 mt-1">从数据库中识别出的记录 (n = ~1,200)</p>
+                        </div>
+                        
+                        <div class="h-6 w-0.5 bg-stone-300"></div>
+
+                        <!-- 筛选阶段 -->
+                        <div onclick="showPrismaDetail('screening')" class="flow-node w-full bg-orange-50 border-l-4 border-orange-500 p-4 rounded shadow-sm hover:bg-orange-100">
+                            <h4 class="font-bold text-orange-900">2. 初筛 (Screening)</h4>
+                            <p class="text-xs text-orange-700 mt-1">题目与摘要筛选 (n = ~800)</p>
+                        </div>
+
+                        <div class="h-6 w-0.5 bg-stone-300"></div>
+
+                        <!-- 资格评估 -->
+                        <div onclick="showPrismaDetail('eligibility')" class="flow-node w-full bg-purple-50 border-l-4 border-purple-500 p-4 rounded shadow-sm hover:bg-purple-100">
+                            <h4 class="font-bold text-purple-900">3. 资格评估 (Eligibility)</h4>
+                            <p class="text-xs text-purple-700 mt-1">全文阅读与评估 (n = ~150)</p>
+                        </div>
+
+                        <div class="h-6 w-0.5 bg-stone-300"></div>
+
+                        <!-- 最终纳入 -->
+                        <div onclick="showPrismaDetail('included')" class="flow-node w-full bg-teal-50 border-l-4 border-teal-500 p-4 rounded shadow-sm hover:bg-teal-100">
+                            <h4 class="font-bold text-teal-900">4. 纳入 (Included)</h4>
+                            <p class="text-xs text-teal-700 mt-1">最终纳入综述的研究 (n = ~45)</p>
+                        </div>
+                    </div>
+
+                    <!-- 详情面板 -->
+                    <div class="bg-stone-50 border border-stone-200 rounded-lg p-6 h-full min-h-[400px]">
+                        <h3 id="prisma-title" class="text-lg font-bold text-stone-800 border-b border-stone-200 pb-2 mb-4">请选择一个阶段...</h3>
+                        <div id="prisma-content" class="text-stone-600 text-sm space-y-4">
+                            <p>请点击左侧的流程图模块，查看系统综述过程中每个步骤的具体方案、工具和排除逻辑。</p>
+                            
+                            <!-- 搜索漏斗图容器 -->
+                             <div class="chart-container mt-6">
+                                <canvas id="funnelChart"></canvas>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 标签页 3: 筛选标准 -->
+        <div id="content-criteria" class="hidden space-y-8 animate-fade-in">
+            <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6">
+                <h2 class="text-xl font-semibold text-stone-800 mb-4">纳入与排除标准</h2>
+                <p class="text-stone-600 mb-6 leading-relaxed">
+                    严格的标准确保综述聚焦于碳中和背景下的UBEM演进。该矩阵定义了研究的边界。
+                </p>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <!-- 纳入标准列 -->
+                    <div class="border border-green-200 rounded-lg overflow-hidden">
+                        <div class="bg-green-50 px-4 py-3 border-b border-green-200 flex justify-between items-center">
+                            <h3 class="font-bold text-green-900">纳入标准 (Inclusion Criteria)</h3>
+                            <span class="text-xs bg-white text-green-800 px-2 py-0.5 rounded border border-green-100">选择</span>
+                        </div>
+                        <div class="p-4 bg-white space-y-3">
+                            <label class="flex items-start space-x-3 cursor-pointer group">
+                                <input type="checkbox" checked class="mt-1 form-checkbox text-green-600 rounded focus:ring-green-500">
+                                <div>
+                                    <span class="text-sm font-medium text-stone-800 block group-hover:text-green-700">IC1: 城市尺度 (Urban Scale)</span>
+                                    <span class="text-xs text-stone-500">研究必须聚焦于社区或城市尺度（而非单体建筑）。</span>
+                                </div>
+                            </label>
+                            <label class="flex items-start space-x-3 cursor-pointer group">
+                                <input type="checkbox" checked class="mt-1 form-checkbox text-green-600 rounded focus:ring-green-500">
+                                <div>
+                                    <span class="text-sm font-medium text-stone-800 block group-hover:text-green-700">IC2: 方法论 (Methodology)</span>
+                                    <span class="text-xs text-stone-500">使用物理建模、数据驱动或混合建模方法。</span>
+                                </div>
+                            </label>
+                            <label class="flex items-start space-x-3 cursor-pointer group">
+                                <input type="checkbox" checked class="mt-1 form-checkbox text-green-600 rounded focus:ring-green-500">
+                                <div>
+                                    <span class="text-sm font-medium text-stone-800 block group-hover:text-green-700">IC3: 碳情境 (Carbon Context)</span>
+                                    <span class="text-xs text-stone-500">明确涉及能源使用、碳排放或碳中和目标。</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- 排除标准列 -->
+                    <div class="border border-red-200 rounded-lg overflow-hidden">
+                        <div class="bg-red-50 px-4 py-3 border-b border-red-200 flex justify-between items-center">
+                            <h3 class="font-bold text-red-900">排除标准 (Exclusion Criteria)</h3>
+                            <span class="text-xs bg-white text-red-800 px-2 py-0.5 rounded border border-red-100">过滤</span>
+                        </div>
+                        <div class="p-4 bg-white space-y-3">
+                            <label class="flex items-start space-x-3 cursor-pointer group">
+                                <input type="checkbox" checked class="mt-1 form-checkbox text-red-600 rounded focus:ring-red-500">
+                                <div>
+                                    <span class="text-sm font-medium text-stone-800 block group-hover:text-red-700">EC1: 非学术来源</span>
+                                    <span class="text-xs text-stone-500">排除白皮书、杂志文章和非同行评审的来源。</span>
+                                </div>
+                            </label>
+                            <label class="flex items-start space-x-3 cursor-pointer group">
+                                <input type="checkbox" checked class="mt-1 form-checkbox text-red-600 rounded focus:ring-red-500">
+                                <div>
+                                    <span class="text-sm font-medium text-stone-800 block group-hover:text-red-700">EC2: 过时情境 (年份 &lt; 2015)</span>
+                                    <span class="text-xs text-stone-500">排除2015年之前的研究（《巴黎协定》前，缺乏碳中和焦点）。</span>
+                                </div>
+                            </label>
+                            <label class="flex items-start space-x-3 cursor-pointer group">
+                                <input type="checkbox" checked class="mt-1 form-checkbox text-red-600 rounded focus:ring-red-500">
+                                <div>
+                                    <span class="text-sm font-medium text-stone-800 block group-hover:text-red-700">EC3: 仅单体建筑</span>
+                                    <span class="text-xs text-stone-500">仅关注 BEM (建筑能源建模) 而无城市交互的研究。</span>
+                                </div>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="mt-6 bg-stone-50 p-4 rounded-lg text-sm text-stone-600 border border-stone-200">
+                    <strong>逻辑检查：</strong> 应用 <strong>EC2 (年份 &lt; 2015)</strong> 对于追踪向碳中和的“演进”至关重要，因为该概念在2015年后才获得显著的建模关注。
+                </div>
+            </div>
+        </div>
+
+        <!-- 标签页 4: 质量评估与提取 -->
+        <div id="content-analysis" class="hidden space-y-8 animate-fade-in">
+             <div class="bg-white rounded-xl shadow-sm border border-stone-200 p-6">
+                <h2 class="text-xl font-semibold text-stone-800 mb-4">质量评估与数据提取</h2>
+                <p class="text-stone-600 mb-6 leading-relaxed">
+                    本部分详细介绍了结构化的数据提取过程，以及使用适用于UBEM的 PROBAST（预测模型偏倚风险评估工具）进行的研究质量评估。
+                </p>
+
+                <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                    <!-- 提取矩阵 -->
+                    <div>
+                        <h3 class="font-bold text-stone-700 mb-3">结构化提取变量</h3>
+                        <div class="bg-stone-50 rounded border border-stone-200 overflow-hidden">
+                            <table class="min-w-full text-sm text-left">
+                                <thead class="bg-stone-100 text-stone-600 font-medium border-b border-stone-200">
+                                    <tr>
+                                        <th class="px-4 py-2">类别</th>
+                                        <th class="px-4 py-2">提取变量</th>
+                                    </tr>
+                                </thead>
+                                <tbody class="divide-y divide-stone-200">
+                                    <tr>
+                                        <td class="px-4 py-3 font-medium text-teal-800">1. 研究ID</td>
+                                        <td class="px-4 py-3 text-stone-600">作者, 年份, 地点, 气候区</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-3 font-medium text-teal-800">2. 方法论</td>
+                                        <td class="px-4 py-3 text-stone-600">物理模型 (白箱), 数据驱动 (黑箱), 混合模型 (灰箱)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-3 font-medium text-teal-800">3. 城市感知</td>
+                                        <td class="px-4 py-3 text-stone-600">数据源 (LiDAR, GIS, 智能电表, 物联网, 街景图)</td>
+                                    </tr>
+                                    <tr>
+                                        <td class="px-4 py-3 font-medium text-teal-800">4. 成果产出</td>
+                                        <td class="px-4 py-3 text-stone-600">精度 (CV-RMSE), 减碳潜力, 计算速度</td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+
+                    <!-- 质量图表 -->
+                    <div>
+                        <h3 class="font-bold text-stone-700 mb-3">质量评估 (偏倚风险)</h3>
+                        <p class="text-xs text-stone-500 mb-2">纳入研究在5个领域的模拟综合得分。</p>
+                        <div class="chart-container">
+                            <canvas id="qualityChart"></canvas>
+                        </div>
+                    </div>
+                </div>
+             </div>
+        </div>
+
+    </main>
+
+    <footer class="bg-stone-800 text-stone-400 py-6 mt-8">
+        <div class="max-w-7xl mx-auto px-4 text-center text-sm">
+            <p>&copy; 2024 UBEM 系统综述方案生成器。专为学术研究规划设计。</p>
+        </div>
+    </footer>
+
+    <!-- JavaScript 逻辑 -->
+    <script>
+        // --- 导航逻辑 ---
+        function switchTab(tabId) {
+            // 隐藏所有内容
+            ['search', 'screening', 'criteria', 'analysis'].forEach(id => {
+                document.getElementById(`content-${id}`).classList.add('hidden');
+                document.getElementById(`tab-${id}`).classList.remove('active-tab');
+                document.getElementById(`tab-${id}`).classList.add('inactive-tab');
+            });
+
+            // 显示选中内容
+            document.getElementById(`content-${tabId}`).classList.remove('hidden');
+            document.getElementById(`tab-${tabId}`).classList.add('active-tab');
+            document.getElementById(`tab-${tabId}`).classList.remove('inactive-tab');
+        }
+
+        // --- 检索式生成逻辑 ---
+        function updateQuery(db) {
+            const output = document.getElementById('query-output');
+            const date = document.getElementById('query-date');
+            
+            let query = "";
+            if (db === 'Scopus') {
+                query = `TITLE-ABS-KEY ( ("Urban Building Energy Modeling" OR "UBEM" OR "City Energy Simulation") AND ("Carbon Neutrality" OR "Net Zero" OR "Decarbonization") AND ("Urban Sensing" OR "Data-driven" OR "Physical Modeling") )`;
+            } else if (db === 'WoS') {
+                query = `TS=( ("Urban Building Energy Modeling" OR "UBEM") AND ("Carbon Neutrality" OR "Net Zero") AND ("Urban Sensing" OR "Data-driven") )`;
+            } else if (db === 'IEEE') {
+                query = `("Document Title":"UBEM" OR "Abstract":"Urban Building Energy Modeling") AND ("Abstract":"Carbon Neutrality")`;
+            }
+            
+            output.innerText = query;
+            const now = new Date();
+            date.innerText = now.toLocaleDateString() + ' ' + now.toLocaleTimeString();
+        }
+
+        // --- PRISMA 交互逻辑 ---
+        const prismaData = {
+            identification: {
+                title: "1. 识别阶段 (Identification)",
+                content: "<strong>目标：</strong> 捕获最大数量的潜在相关研究。<br><br><strong>操作：</strong><br>• 在 Scopus, WoS, 和 IEEE Xplore 中执行检索串。<br>• 导出引文至 EndNote/Zotero。<br>• 去重（自动 + 人工检查）。<br><br><strong>预计记录：</strong> 1,200 条原始记录 -> 800 条唯一记录。"
+            },
+            screening: {
+                title: "2. 初筛阶段 (Screening)",
+                content: "<strong>目标：</strong> 基于标题和摘要高效剔除无关研究。<br><br><strong>工具：</strong> Rayyan 或 Covidence。<br><strong>筛选标准应用：</strong><br>• 若仅涉及'单体建筑'则排除。<br>• 若纯粹为'材料科学'且无城市背景则排除。<br>• 若仅涉及'室内空气质量'而无能源/碳焦点则排除。<br><br><strong>预计保留：</strong> 800 -> 150 项研究。"
+            },
+            eligibility: {
+                title: "3. 资格评估阶段 (Eligibility)",
+                content: "<strong>目标：</strong> 对照严格的纳入标准进行全文审查。<br><br><strong>流程：</strong><br>• 阅读全文。<br>• 检查数据可用性（必须报告模型输入/输出）。<br>• 验证碳中和相关性（是否作为背景或目标提及？）。<br><br><strong>关键排除：</strong> 无验证的研究或纯理论论文。"
+            },
+            included: {
+                title: "4. 最终纳入 (Included Studies)",
+                content: "<strong>目标：</strong> 最终用于数据提取和综合的一组论文。<br><br><strong>结果：</strong> ~45 项高质量研究，代表了UBEM的演进过程。<br><strong>综合策略：</strong><br>• 编年史分析（物理模型 -> 数据驱动）。<br>• 主题分析（碳应用）。<br>• 模型精度的荟萃分析（CV-RMSE）。"
+            }
+        };
+
+        function showPrismaDetail(phase) {
+            const titleEl = document.getElementById('prisma-title');
+            const contentEl = document.getElementById('prisma-content');
+            
+            // 更新文本
+            titleEl.innerHTML = prismaData[phase].title;
+            // 保持图表在内容中
+            contentEl.innerHTML = `<p>${prismaData[phase].content}</p><div class="chart-container mt-6"><canvas id="funnelChart"></canvas></div>`;
+            
+            // 重新渲染图表 (因为 innerHTML 会销毁 canvas)
+            setTimeout(initFunnelChart, 50);
+        }
+
+        // --- Chart.js 初始化 ---
+        
+        // 1. 漏斗图 (使用柱状图模拟)
+        function initFunnelChart() {
+            const ctx = document.getElementById('funnelChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['识别', '初筛', '资格', '纳入'],
+                    datasets: [{
+                        label: '论文数量',
+                        data: [1200, 800, 150, 45],
+                        backgroundColor: [
+                            'rgba(59, 130, 246, 0.6)', // 蓝
+                            'rgba(249, 115, 22, 0.6)', // 橙
+                            'rgba(168, 85, 247, 0.6)', // 紫
+                            'rgba(20, 184, 166, 0.6)'  // 青
+                        ],
+                        borderColor: [
+                            'rgb(59, 130, 246)',
+                            'rgb(249, 115, 22)',
+                            'rgb(168, 85, 247)',
+                            'rgb(20, 184, 166)'
+                        ],
+                        borderWidth: 1
+                    }]
+                },
+                options: {
+                    indexAxis: 'y',
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: { display: false },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return '剩余 ' + context.raw + ' 篇论文';
+                                }
+                            }
+                        }
+                    },
+                    scales: {
+                        x: { beginAtZero: true, title: { display: true, text: '记录数量' } }
+                    }
+                }
+            });
+        }
+
+        // 2. 质量雷达图
+        function initQualityChart() {
+            const ctx = document.getElementById('qualityChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: [
+                        '数据源可靠性', 
+                        '模型验证', 
+                        '城市尺度相关性', 
+                        '碳计算清晰度', 
+                        '可复现性'
+                    ],
+                    datasets: [{
+                        label: '物理模型 (传统)',
+                        data: [4, 5, 3, 3, 5],
+                        fill: true,
+                        backgroundColor: 'rgba(59, 130, 246, 0.2)',
+                        borderColor: 'rgb(59, 130, 246)',
+                        pointBackgroundColor: 'rgb(59, 130, 246)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(59, 130, 246)'
+                    }, {
+                        label: '数据驱动模型 (现代)',
+                        data: [3, 4, 5, 5, 2],
+                        fill: true,
+                        backgroundColor: 'rgba(20, 184, 166, 0.2)',
+                        borderColor: 'rgb(20, 184, 166)',
+                        pointBackgroundColor: 'rgb(20, 184, 166)',
+                        pointBorderColor: '#fff',
+                        pointHoverBackgroundColor: '#fff',
+                        pointHoverBorderColor: 'rgb(20, 184, 166)'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    elements: {
+                        line: { borderWidth: 3 }
+                    },
+                    scales: {
+                        r: {
+                            angleLines: { display: false },
+                            suggestedMin: 0,
+                            suggestedMax: 5
+                        }
+                    }
+                }
+            });
+        }
+
+        // 加载时初始化图表
+        window.addEventListener('load', () => {
+            initFunnelChart();
+            initQualityChart();
+            // 默认显示第一个阶段
+            showPrismaDetail('identification'); 
+        });
+
+    </script>
+</body>
+</html>
